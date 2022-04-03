@@ -1,20 +1,17 @@
 <template>
-  <div>
-    <b-navbar type="dark" variant="dark" fixed="top">
-      <b-navbar-nav>
-        <b-nav-item href="#">Home</b-nav-item>
-        <!-- Navbar dropdowns -->
-        <b-nav-item-dropdown text="Lang" right>
-          <b-dropdown-item href="#">EN</b-dropdown-item>
-          <b-dropdown-item href="#">ES</b-dropdown-item>
-          <b-dropdown-item href="#">RU</b-dropdown-item>
-          <b-dropdown-item href="#">FA</b-dropdown-item>
-        </b-nav-item-dropdown>
-        <b-nav-item-dropdown text="User" right>
-          <b-dropdown-item href="#">Account</b-dropdown-item>
-          <b-dropdown-item href="#">Settings</b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-    </b-navbar>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<div class="container-fluid">
+	<a class="navbar-brand" href="#">Nanraka</a>
+	<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="#">Home</a>
+        <a class="nav-link active" aria-current="page"  href="#">Features</a>
+        <a class="nav-link active" aria-current="page"  href="#">Pricing</a>
+      </div>
+    </div>
   </div>
+</nav>
 </template>

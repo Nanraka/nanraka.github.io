@@ -1,27 +1,61 @@
 <template>
- <div>
-   <BootstrapTest />
- </div>
+  <v-app>
+    <!-- ヘッダー -->
+    <header>
+      <v-app-bar 
+        app
+        dark
+      >
+      <!-- ハンバーガーメニュー -->
+      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+      <v-toolbar-title>Nanraka</v-toolbar-title>
+      </v-app-bar>
+
+      <!-- ハンバーガーメニューの制御 -->
+      <v-navigation-drawer
+        v-model="drawer" 
+        fixed
+        temporary
+      >
+        <!-- ハンバーガーメニュー内要素の設定 -->
+        <v-list
+          nav
+          dense
+        >
+          <v-list-item-group>
+            <v-list-item
+              v-for='menuItem in menuItems'
+              :key="menuItem"
+            >
+            <v-list-item-title>{{menuItem.name}}</v-list-item-title>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-navigation-drawer>
+    </header>
+  </v-app>
 </template>
 
 <script>
-import BootstrapTest from './components/modules/WebButton.vue'
+import constants from './common/constants.js'
  
 export default {
- name: 'App',
- components: {
-   BootstrapTest
- }
+    name: 'App',
+    data(){
+      return{
+        drawer: false,
+        menuItems: constants.menuItems
+      }
+    }
 }
 </script>
 
 <style>
-#app {
- font-family: Avenir, Helvetica, Arial, sans-serif;
- -webkit-font-smoothing: antialiased;
- -moz-osx-font-smoothing: grayscale;
- text-align: center;
- color: #2c3e50;
- margin-top: 60px;
-}
+ #app {
+     font-family: Avenir, Helvetica, Arial, sans-serif;
+     -webkit-font-smoothing: antialiased;
+     -moz-osx-font-smoothing: grayscale;
+     text-align: center;
+     color: #2c3e50;
+ }
 </style>

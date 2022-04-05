@@ -6,9 +6,19 @@
         app
         dark
       >
-      <!-- ハンバーガーメニュー -->
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-      <v-toolbar-title>Nanraka</v-toolbar-title>
+        <!-- ハンバーガーメニュー -->
+        <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
+        <v-toolbar-title>Nanraka</v-toolbar-title>
+        
+        <!-- ナビゲーションメニューの作成 -->
+        <v-tabs>
+          <v-tab
+            v-for = "(menuItem,index) in menuItems"
+            :key = "index"
+          >
+          {{ menuItems.name }}
+          </v-tab>
+        </v-tabs>
       </v-app-bar>
 
       <!-- ハンバーガーメニューの制御 -->
@@ -59,3 +69,11 @@ export default {
      color: #2c3e50;
  }
 </style>
+
+<!-- ツールバータイトルの表示変更 -->
+<style lang="scss" scoped>
+  .v-toolar__title{
+    overflow: visible !important;
+    margin-right: 50px !important;
+  }
+  </style>

@@ -46,6 +46,7 @@
   </v-app>
 </template>
 
+
 <script>
 import constants from './common/constants.js'
  
@@ -60,17 +61,7 @@ export default {
 }
 </script>
 
-<style>
- #app {
-     font-family: Avenir, Helvetica, Arial, sans-serif;
-     -webkit-font-smoothing: antialiased;
-     -moz-osx-font-smoothing: grayscale;
-     text-align: center;
-     color: #2c3e50;
- }
-</style>
 
-<!-- ツールバータイトルの表示変更 -->
 <style lang="css" scoped>
   .v-toolbar__title {
     overflow: visible !important;

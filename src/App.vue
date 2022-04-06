@@ -71,9 +71,9 @@ export default {
 </style>
 
 <!-- ツールバータイトルの表示変更 -->
-<style lang="scss" scoped>
-  .v-toolar__title{
+<style lang="css" scoped>
+  .v-toolbar__title {
     overflow: visible !important;
     margin-right: 50px !important;
   }
-  </style>
+</style>

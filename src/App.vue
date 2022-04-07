@@ -1,70 +1,25 @@
 <template>
   <v-app>
-    <!-- ヘッダー -->
-    <header>
-      <v-app-bar 
-        app
-        dark
-      >
-        <!-- ハンバーガーメニュー -->
-        <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
-        <v-toolbar-title>Nanraka</v-toolbar-title>
-        
-        <!-- ナビゲーションメニューの作成 -->
-        <v-tabs>
-          <v-tab
-            v-for = "(menuItem,index) in menuItems"
-            :key = "index"
-          >
-          {{ menuItems.name }}
-          </v-tab>
-        </v-tabs>
-      </v-app-bar>
-
-      <!-- ハンバーガーメニューの制御 -->
-      <v-navigation-drawer
-        v-model="drawer" 
-        fixed
-        temporary
-      >
-        <!-- ハンバーガーメニュー内要素の設定 -->
-        <v-list
-          nav
-          dense
-        >
-          <v-list-item-group>
-            <v-list-item
-              v-for='menuItem in menuItems'
-              :key="menuItem"
-            >
-            <v-list-item-title>{{menuItem.name}}</v-list-item-title>
-            </v-list-item>
-          </v-list-item-group>
-        </v-list>
-      </v-navigation-drawer>
-    </header>
+    <WebHeader />
+     <v-content>
+      <WebHome/>
+    </v-content>
+    <WebFooter />
   </v-app>
 </template>
 
 
 <script>
-import constants from './common/constants.js'
- 
-export default {
-    name: 'App',
-    data(){
-      return{
-        drawer: false,
-        menuItems: constants.menuItems
-      }
-    }
+import WebHeader from "./components/modules/WebHeader.vue"
+import WebHome from './components/pages/WebHome.vue'
+import WebFooter from "./components/modules/WebFooter.vue"
+
+export default{
+  name: "App",
+  components: {
+    WebHeader,
+    WebHome,
+    WebFooter
+  }
 }
 </script>
-
-
-<style lang="css" scoped>
-  .v-toolbar__title {
-    overflow: visible !important;
-    margin-right: 50px !important;
-  }
-</style>

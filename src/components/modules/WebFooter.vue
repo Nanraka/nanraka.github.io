@@ -1,3 +1,4 @@
+<!--
 <template>
     <footer>
         <p>Copyright 2022 Nanraka</p>
@@ -56,5 +57,24 @@
         footer {
             grid-template-columns: 1fr 980px 1fr;
         }
+    }
+</style>
+-->
+
+
+<template>
+  <v-footer
+    dark
+    absolute
+  >
+    <div class = "footer">
+        Copyright test 2022. All right reserved
+    </div>
+  </v-footer>
+</template>
+
+<style scoped>
+    .footer{
+        margin: auto;
     }
 </style>

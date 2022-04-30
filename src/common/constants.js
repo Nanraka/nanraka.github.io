@@ -2,19 +2,19 @@ export default{
     menuItems: [
         {
             name: 'Home',
-            url: '$'
+            url: '/'
         },
         {
             name: 'About',
-            url: '$'
+            url: '/about'
         },
         {
             name: '作ったもの',
-            url: '$'
+            url: '/made'
         },
         {
             name: 'メモ書き',
-            url: '$'
+            url: '/memorandum'
         }
     ]
 }

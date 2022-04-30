@@ -1,5 +1,20 @@
 <template>
   <section class="about">
-    <h2>About</h2>
+    <AppBackgroundHolder :title="title"/>
+    <h2>プロフィール</h2>
   </section>
 </template>
+<script>
+import AppBackgroundHolder from '../modules/AppBackgroundHolder.vue'
+ 
+export default {
+  data () {
+    return {
+      title: 'About'
+    }
+  },
+  components: {
+    AppBackgroundHolder
+  }
+}
+</script>

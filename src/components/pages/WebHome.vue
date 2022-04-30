@@ -1,16 +1,22 @@
 <template>
   <section class="home">
-    <HomeHero/>
+    <HomeHero />
+    <HomeAbout />
+    <HomeService />
   </section>
 </template>
 
 
 <script>
 import HomeHero from '../modules/HomeHero.vue'
+import HomeAbout from '../modules/HomeAbout.vue'
+import HomeService from '../modules/HomeService.vue'
  
 export default {
   components: {
-    HomeHero
+    HomeHero,
+    HomeAbout,
+    HomeService
   }
 }
 </script>

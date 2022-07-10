@@ -1,0 +1,698 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>自作スピーカーエンクロージャ</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="6fa4055a-493c-485c-b770-41ea2f95ba74" class="page sans"><header><h1 class="page-title">自作スピーカーエンクロージャ</h1></header><div class="page-body"><p id="d7a1d841-6763-4373-817c-1eec3f709c2a" class="">
+</p><h2 id="99a0e04a-8550-49bd-9123-b174f525fd5a" class="block-color-gray_background">概要</h2><p id="3922175a-522e-411f-804c-f653d8adf944" class="">　こちらの記事で紹介したようにオーディオアンプを設計しました．前回の記事ではアンプの動作確認をするために秋月で販売している<a href="https://akizukidenshi.com/catalog/g/gP-03285/">8Ω8Wのスピーカーユニット</a>をそのまま使用していました．しかし，あとになってスピーカーユニットだけでなくユニットを囲む箱（エンクロージャー）もあると音質がさらに良くなることを教えてもらい，設計を試みることにしました．</p><p id="8365dbbd-4638-423a-bdbb-44e1e568c9ba" class="">
+</p><h2 id="f7008989-f749-4597-be6b-a286cf4f5a6d" class="block-color-gray_background">仕様設定</h2><p id="1e0b3bae-150f-4c43-8fbd-33cb7a89f4a7" class="">　まずエンクロージャの材料ですが加工性が良いMDF材で作製することにしました．エンクロージャの大きさは机の上においても邪魔にならない2 Lのものを目指すことにしました．エンクロージャの種類には様々なものがありますが，今回は加工が簡単でそれなりの特性が出るバスレフ型を作製します．バスレフ型はスピーカーから出る音の低音領域の周波数特性を改善することでスピーカー全体の性能を向上させます．詳しい解説については<a href="https://kanon5d.web.fc2.com/audio/kouza11_1.html">こちらのサイト</a>へ．</p><p id="8ae72b99-a5f4-4283-9d47-5359256fbcbe" class="">
+</p><h2 id="f8d6511a-3853-4e10-aa92-cb757174728b" class="block-color-gray_background">必要なもの</h2><p id="1370f664-fca8-40e3-aaab-81fab65e227a" class="">　吸音材とかダクトの材料などはホームセンターを歩き回って使えそうなものを選定しました．必要な材料は以下のとおり．</p><p id="5181050c-51e8-4450-9ad9-bcbfdee0f037" class="">
+</p><ul id="0a362cb9-8d55-4381-b0bb-22efe95f659f" class="bulleted-list"><li style="list-style-type:disc">スピーカーユニット 2つ</li></ul><ul id="2f841f04-570e-4a24-b242-d3c15bfcb633" class="bulleted-list"><li style="list-style-type:disc">MDF材</li></ul><ul id="f45a40f2-b847-49c5-94b8-d6908ab43cdb" class="bulleted-list"><li style="list-style-type:disc">塩ビパイプ（ダクトに使用する）</li></ul><ul id="956c5f47-e2b0-4f95-b842-751002703b9d" class="bulleted-list"><li style="list-style-type:disc">ラッカースプレー黒</li></ul><ul id="ad507ca2-134d-42e2-8344-87d6404cfec3" class="bulleted-list"><li style="list-style-type:disc">吸音材</li></ul><ul id="58759d90-c628-4b98-9ae0-9f331d71d545" class="bulleted-list"><li style="list-style-type:disc">プッシュターミナル（スピーカー用コネクタ）</li></ul><ul id="013ae1c1-ee97-4784-a9fb-86dd562306cf" class="bulleted-list"><li style="list-style-type:disc">配線材（AWG15）</li></ul><p id="6e2db88f-4272-4ce7-8b68-d9b05140e497" class="">
+</p><h2 id="c99646c0-f426-4783-9323-6b65fefda81b" class="block-color-gray_background">使用するスピーカーユニットの候補調査</h2><p id="0b04530f-96cf-4e35-8502-c36b7f8abb14" class="">秋月で販売されている8Ω8W以外で候補を挙げてみました．</p><p id="f9ce20d3-d64f-44b2-b038-8363f1ded4c9" class="">
+</p><ul id="c5b0b6be-94f4-42d1-b7be-04482fac77e7" class="bulleted-list"><li style="list-style-type:disc">100円均一ショップ300円スピーカー<p id="983930b1-3f51-488b-950a-cc064ed333da" class="">100円でないのは伏せておいて，なんといっても入手性がいい．ただユニットの特性がわからないかも．．．</p><figure id="7a47facf-acbe-4b15-ad3c-d5e5b027cf83"><a href="https://expnote.com/daiso-300yen-speaker/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">ダイソーの300円スピーカーがやっと購入できたのでレビュー</div><div class="bookmark-description">話題の300円スピーカーがやっと買えたのでレビューします。 ネットで話題になっていたので以前から探していたのですが、人気商品なのか近所のダイソーはいつも品切れ状態でなかなか買えませんでした。先日たまたま立ち寄ったダイソーでついに発見、購入できましたー。 さっそくレビューです。 ...</div></div><div class="bookmark-href"><img src="https://expnote.com/favicon.ico" class="icon bookmark-icon"/>https://expnote.com/daiso-300yen-speaker/</div></div><img src="https://expnote.com/wp-content/uploads/2018/02/300yen-speaker-01.jpg" class="bookmark-image"/></a></figure></li></ul><p id="2f7f1442-dbdd-4583-b3f6-7d713eaef453" class="">
+</p><ul id="58563b35-9861-41fa-8cc7-e14aad376c12" class="bulleted-list"><li style="list-style-type:disc">FR58C<p id="bf7c2e23-b0b8-4e7f-b91b-63269c13d462" class="">特性表があるのでエンクロージャの設計には困らないかも．ただ少し割高．amazonにないので<a href="https://dp00000116.shop-pro.jp">コイズミ無線有限会社</a>から購入することを検討．送料などを考慮するとさらに割高になる．</p><figure id="af7730f3-def9-49dc-b951-0c84ccc83d7d"><a href="http://www.loudspeakerdatabase.com/Fountek/FR58C" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Fountek FR58C</div><div class="bookmark-description">Force factor B·l 1.608 T·m Effective diaphragm diameter Ø 4.8 cm Efficiency η₀ 0.07 % Efficiency bandwidth product EBP 64 Simulate this driver in a Import this speaker driver in a enclosure design software Overall diameter 61.3 mm Overall depth 39.4 mm Net weight 0.213 kg Voice coil diameter 21.1 mm Voice coil height (H VC) 5.2 mm Coil material Copper Clad Aluminium Former material Kapton Magnet Ferrite Air gap height 3 mm Flux density 0.7 Tesla Similar speaker drivers to Fountek FR58C All trademarks are property of their respective owners.</div></div><div class="bookmark-href"><img src="http://www.loudspeakerdatabase.com/favicon.ico" class="icon bookmark-icon"/>http://www.loudspeakerdatabase.com/Fountek/FR58C</div></div><img src="http://www.loudspeakerdatabase.com/Fountek/FR58C/Fountek_FR58C_(Photo_1).jpg" class="bookmark-image"/></a></figure></li></ul><p id="88c06dad-9bf3-40c1-bb24-3398448873ac" class="">
+</p><ul id="45ae61b6-d6a6-4d3b-a8bf-2a665df99c6c" class="bulleted-list"><li style="list-style-type:disc">P650K<p id="65701063-39a3-421b-baf4-416524dc880a" class="">こちらも特性表が存在する．amazonで入手可能．</p><figure id="626db448-6918-46cc-b4fc-eabaf8de7527"><a href="https://www.fostex.jp/products/p650k/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">P650K | Fostex(フォステクス)</div><div class="bookmark-description">・バナナパルプ配合軽量コーン／高損失発泡ゴムエッジ コーン紙はバナナパルプをベースに2つの異なる物性に調整した木材パルプを混ぜることで軽量ながら十分な剛性と損失を保有させています。また、エッジはアップロール形状により高ストローク化を図り、材料には高損失発泡ゴムエッジを採用しています。 ・メカニカル2Wayセンターキャップ ...</div></div><div class="bookmark-href">https://www.fostex.jp/products/p650k/</div></div><img src="https://www.fostex.jp/wp/wp-content/uploads/P650K_top_620x394.jpg" class="bookmark-image"/></a></figure></li></ul><p id="cc33559f-a922-4678-b5d8-38b93a0cd082" class="">
+</p><ul id="632e0bb0-6d94-4584-b6c4-289d00f2305a" class="bulleted-list"><li style="list-style-type:disc">PM-M0841CK<p id="8d245573-c05f-40b8-bfe7-b717d9a60f4e" class="">ネットで謎のスピーカーユニット（笑）としてチラホラ聞く機種．価格は格安で1つ900円で販売されている．amazonで購入可能．ただ固定具がない．そうやってエンクロージャに固定するか悩みどころ．</p><figure id="1b9749d7-f64b-4e7f-be67-05c0da722124"><a href="https://www.snowinnovember.info/archives/20200607-pm-m0841ck-speaker.html" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">謎なスピーカーユニットPM-M0841CKを使用してスピーカーの製作</div><div class="bookmark-description">スピーカーユニットはかなり前に秋葉原のaitendoで購入したPM-M0841CKを使用しました。現在取り扱いは無いようですが、 こちら では取り扱いがあるようです。購入した後そのまま保管していたものになりますが、ちゃんと使えました。 ...</div></div><div class="bookmark-href"><img src="https://www.snowinnovember.info/wp-content/uploads/2018/01/cropped-icon_512x512-192x192.jpg" class="icon bookmark-icon"/>https://www.snowinnovember.info/archives/20200607-pm-m0841ck-speaker.html</div></div><img src="https://www.snowinnovember.info/wp-content/uploads/2020/06/pm-m0841ck_box_front-730x410.jpg" class="bookmark-image"/></a></figure></li></ul><p id="79a261b9-0f29-417d-9dc5-524c7df75bad" class="">
+</p><p id="0a5ee903-ad52-4d20-b119-a805446e4a61" class="">
+</p><h2 id="ec89a0ef-a1eb-4965-ae2b-05be2f61a2a2" class="block-color-gray_background">エンクロージャの設計，スピーカーの剪定</h2><p id="35f98e03-be06-45ba-8b63-d7bbffd3c678" class="">　次にエンクロージャを設計し，設計する中でエンクロージャの寸法が実現可能となるようなスピーカー選定しようと考えました．設計方法は<a href="https://kanon5d.web.fc2.com/audio/kouza11_1.html">こちらのサイト</a>を参考にしました．重要な設計項目を順番に羅列していきたいと考えます．</p><p id="e765bc2c-7246-4abd-8b47-97c6ce9d8b6e" class="">
+</p><h3 id="0eb79fbc-0ffb-4980-a5ef-9f7c4c9400f6" class="block-color-blue_background">基準となるパラメータの選択</h3><p id="8427b0f3-a3fa-4cd3-9c62-a101aa9d57e2" class="">今回はエンクロージャの容量を2 Lにしたかったので容量は固定．そしてスピーカー口径と実行振動板半径を特性表から拾ってきます．</p><p id="5a76986b-8c46-4a5a-8257-1dfb15af3be7" class="">ここで8Ω8Wユニットと百均ユニットが脱落．実行振動板面積はわからないとエンクロージャの設計ができないので．</p><figure id="2c0b8b36-9509-4360-9fa2-25df91c4ac7e" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.02.56.jpg"><img style="width:768px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.02.56.jpg"/></a></figure><p id="c3f0e4d6-2b68-4742-80dc-f1e1a8cd672f" class="">
+</p><h3 id="68e15961-9675-49a6-90ea-c5bc7c97f7c7" class="block-color-blue_background">ダクト断面積</h3><p id="173a0d48-6b55-49b9-8ddd-8bac403e11bc" class="">以下式で実行振動板半径からダクト断面積を設計します．</p><p id="7d09d4d3-d013-42dd-b324-cf695ecb5a9b" class="">実行振動板面積に任意定数をかけることで決定します．この任意定数を変更することでダクトから出力される音質が微妙に変化するのだそう．使用したいスピーカーユニットのスピーカー口径と参考サイトより今回は0.5としました．</p><p id="22e1b46b-8aef-4534-be44-cf09a4698356" class="">計算結果は以下のとおり．どのユニットについてもまともな値が出てそう．</p><figure id="e5d0bd2d-1a13-41ec-9703-7238888acf51" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.06.06.jpg"><img style="width:768px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.06.06.jpg"/></a></figure><p id="18d4c221-91ee-4538-9c3e-ff9879c335de" class="">
+</p><h3 id="c3f4a4c7-a79b-4565-99ad-22dab846d504" class="block-color-blue_background">ダクト共振周波数</h3><p id="7e25de8a-6759-4fed-90dd-34891095929e" class="">次にダクト共振周波数の設定．最低共振周波数の1.0倍から0.8がいいのだそう．今回はひとまず0.95倍とし，後の計算で不都合が出てくると見直すということにしました．</p><figure id="a79e326a-33f2-4c68-81fe-b169757004e5" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.07.57.jpg"><img style="width:768px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.07.57.jpg"/></a></figure><p id="a56c7247-9079-481c-9b8b-8820455eab88" class="">
+</p><h3 id="838a5531-9c76-469a-bcbd-73b6fcf75e9a" class="block-color-blue_background">ダクト長さ</h3><p id="d667f2d5-8ad7-4842-ad47-4585cefc5051" class="">次に以下式よりダクト長さを計算します．</p><p id="8ff1299b-6c57-4554-80aa-a3f2c2c89837" class="">計算結果はこちら．</p><figure id="e11496a2-4ca3-4fcd-9ee3-dc1d9aa10e1d" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.13.48.jpg"><img style="width:768px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.13.48.jpg"/></a></figure><p id="2632c1ba-b834-436d-b921-2bc4cf74d97a" class="">
+</p><h3 id="0ef8e813-873b-4eae-b1c8-f60e0db66a92" class="block-color-blue_background">ダクトの位置</h3><p id="e0c3f2cc-1ae3-458d-9b11-825043a38a63" class="">次に上記寸法のダクトを取り付ける位置ですがエンクロージャ前面に取り付けることにしました．ダクトが前面にあると音のスピード感が良くなり中高音の雑音が聞こえやすくなるみたいです．まぁ，雑音は聞いてもわからないだろうと．．．</p><p id="fc99cc67-3612-41ba-b878-8e9fb78b5b71" class="">また，スピーカー中心点とダクト中心点との距離Lは以下のような理論式があるようです．今回は最低値と最大値の中央値を取ることにしました．</p><figure id="7cd15944-ba64-44c8-8271-5493666a8bbf" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.31.27.jpg"><img style="width:768px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.31.27.jpg"/></a></figure><p id="d0e2fb8d-57b2-4113-9220-46f1066ade30" class="">
+</p><p id="00181803-6e9c-47e8-8bae-4e2a1dbf7b51" class="">上記計算結果とスピーカーの入手性，使用のしやすさから今回は<mark class="highlight-red"><strong>P650K</strong></mark>を使用することに決めました．</p><p id="12939275-a2f0-47ca-82aa-8ba5d82dd21a" class="">
+</p><h2 id="74aef58d-0e8c-492b-bd5e-c6700ace4e83" class="block-color-gray_background">エンクロージャの作製</h2><p id="b2728aeb-c51f-4b66-978a-37cd30878cab" class="">　ここからエンクロージャを実際に作製していきます．作製の前にFusion360で先程の計算結果をどのように箱にするかモデリングしていきます．</p><p id="b5f14faa-5949-4b8c-8c3a-262053793497" class="">　こんな感じ．なんか作れそうな気がしてきた．</p><figure id="0f0230b7-cbbb-43e4-b04e-24c1c63f659b" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.37.14.jpg"><img style="width:240px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88_2022-07-09_22.37.14.jpg"/></a></figure><p id="48f4d2b3-4d6f-4f46-acd0-771f64a27d3b" class="">
+</p><div id="d44e0217-5384-48f6-952a-78433d2b15c9" class="column-list"><div id="d142d752-e057-4c37-aee4-eb66ebaf8172" style="width:31.25%" class="column"><figure id="b038e2a5-c786-496f-a1e1-0de3be2611af" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/IMG_0937.jpeg"><img style="width:3024px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/IMG_0937.jpeg"/></a></figure></div><div id="20f411db-7f68-46ff-b32d-5885818ba290" style="width:68.75%" class="column"><p id="17edc1a2-465f-4399-8b96-ff35712bcea7" class="">　モデリングした寸法通りにMDF材を切っていきます．切断はノコギリで．切断したものはホルソーをボール盤に固定して必要箇所に穴を開けていきます．ボール盤は左写真にあるようなサークルのものを貸してもらいました．</p><p id="486114c5-c286-446e-99ea-f5fcef78b038" class="">
+</p><p id="35eb30c2-7556-437f-8e9a-771e0479f722" class="">　ここで一つ問題が．．．サークルにあるホルソーの最大サイズが直径50 mmのものまでしかないではないですか．今回使用するスピーカーユニットはP650K．このユニットをはめ込むためには直径55 mmの穴を開ける必要があります．仕方がないので直径50 mmの穴を開けた後にヤスリで5 mm穴を広げることにしました．</p></div></div><p id="cf671636-0585-437d-994f-eb92208902f9" class="">
+</p><p id="f226e9d1-ecae-4ef6-8749-efc38ea71d01" class="">というわけで最終的に加工した前面パネルは以下のようになりました．いい感じ．</p><figure id="7d94dd62-6640-47ad-8acb-bd1fbfa0023c" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/MDF%E5%88%87%E3%82%8A%E5%87%BA%E3%81%97.jpg"><img style="width:480px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/MDF%E5%88%87%E3%82%8A%E5%87%BA%E3%81%97.jpg"/></a></figure><p id="c681ed45-69aa-41c2-abff-abe5e8747a1b" class="">
+</p><p id="ec3565d0-1806-459a-a4bb-00be9b7c004c" class="">切り出したMDF材を木工用ボンドで接着していきます．ついでにプッシュターミナルの取り付け配線も付けも．ちなみに，今回はプシュターミナルとスピーカーの取り付けには木ネジを使用しますが木ネジをMDF材に使用するとMDF材が削れてしっかりと固定できないことがあるらしいです．なので今回は木ネジに木工用ボンドを付けてからネジ止しました．</p><div id="44a90b4a-5495-40f8-b8df-6f67f6bc94a0" class="column-list"><div id="cbc2246a-8cc3-4928-a1b6-a7f223b32900" style="width:37.5%" class="column"><figure id="c05c660a-5265-4dcb-a994-bac84990f550" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%83%95%E3%82%9A%E3%83%83%E3%82%B7%E3%83%A5%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB_.jpg"><img style="width:336px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%83%95%E3%82%9A%E3%83%83%E3%82%B7%E3%83%A5%E3%82%BF%E3%83%BC%E3%83%9F%E3%83%8A%E3%83%AB_.jpg"/></a></figure></div><div id="27d5e0c5-f001-44e9-b5b1-3c6fee062f92" style="width:62.5%" class="column"><figure id="e1a8db3e-7b66-4604-8477-2c9e599e2ce3" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%81%AF%E3%81%93%EF%BC%91.jpg"><img style="width:288px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%81%AF%E3%81%93%EF%BC%91.jpg"/></a></figure></div></div><p id="548a82cc-37d4-4572-a8b0-e8ea70a0aee1" class="">
+</p><p id="507dd186-02f7-4657-84b1-ea801ca7e69d" class="">ダクトには塩ビを切り出して作ります．後に黒のラッカースプレーで塩ビとわからないように塗装しました．</p><figure id="32fdb224-ccf1-4ae0-a1fd-923f154acddf" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%A1%A9%E3%83%92%E3%82%99.jpg"><img style="width:480px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%A1%A9%E3%83%92%E3%82%99.jpg"/></a></figure><p id="9afb8fb0-0d95-450c-98cc-815cc1f4fd26" class="">
+</p><p id="c68ffaad-5259-46c8-b785-a59d56f9a5bb" class="">こちらは取り付けるスピーカー．現物をみるとワクワクしますね．</p><div id="4dfe640c-bd21-4af8-a899-265fb1f939a1" class="column-list"><div id="517c7794-45db-4945-ae0f-e9ac80c55149" style="width:50%" class="column"><figure id="b388e49c-5d1a-448e-8c02-d941155849e4" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC.jpg"><img style="width:1706px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC.jpg"/></a></figure></div><div id="8135de95-e363-43d7-8aab-ff2ebd5c4dbb" style="width:50%" class="column"><figure id="de0ae939-12ac-46fe-9e72-f87edea8c2b8" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%81%AF%E3%81%93.jpg"><img style="width:1706px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%81%AF%E3%81%93.jpg"/></a></figure></div></div><p id="4fad7e29-0a2a-431e-8fdd-c70c5ef3584f" class="">
+</p><p id="df980fe2-e72d-4cff-9dbc-22db155be051" class="">忘れてはいけないのがエンクロージャの中に入れる吸音材．こちらは机の下とかに貼るものを適当な大きさに切って使用することにしました．</p><figure id="7a5b2b8b-b242-4c81-bcaf-d883f9e9e509" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%90%B8%E9%9F%B3%E6%9D%90.jpg"><img style="width:528px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%90%B8%E9%9F%B3%E6%9D%90.jpg"/></a></figure><p id="91aaabc3-646d-47df-b6cd-251149e2735f" class="">
+</p><p id="b9d12048-e358-45cb-9144-eb30261f76f9" class="">最後にMDF材全体をキメの細かい紙やすりで磨いておいましょう．</p><p id="0ad8cbc6-3e29-4d0e-beee-e5fef89bdf0d" class="">
+</p><h2 id="215b6feb-8d87-4de0-b155-e007b1f753bf" class="block-color-gray_background">完成🎉</h2><p id="787eb2f8-db05-4482-aac7-7f468b169eb1" class="">というわけでエンクロージャ完成です✨</p><p id="0c56fd18-8b81-4ad7-8708-a87604852c4b" class="">個人的には思ったよりも完成度が高いものができたのではないかと思いました．設計段階にどんな音を出したいかというパラメータがあるのが斬新でした．</p><figure id="4eadbf44-b669-4ea0-ad81-a06301468e39" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%AE%8C%E6%88%901.jpg"><img style="width:528px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%AE%8C%E6%88%901.jpg"/></a></figure><figure id="60271213-cd63-47ee-9115-e5bfd9b9f840" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%AE%8C%E6%88%902.jpg"><img style="width:528px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/%E5%AE%8C%E6%88%902.jpg"/></a></figure><p id="7ebcd574-0d9c-4a46-bbc6-4a5ff52ba88e" class="">
+</p><p id="09c2eed5-637e-43dc-87c9-8ab7a82e3ef7" class="">前回作製したミニアンプと繋げてみましょう．重みのある音を聞くことができたので満足です．</p><figure id="0d6258cc-f338-4106-909d-9c3977e01876" class="image"><a href="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/P_20191020_184700.jpg"><img style="width:528px" src="%E8%87%AA%E4%BD%9C%E3%82%B9%E3%83%92%E3%82%9A%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%A8%E3%83%B3%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%B7%E3%82%99%E3%83%A3%206fa4055a493c485cb77041ea2f95ba74/P_20191020_184700.jpg"/></a></figure><p id="64cdaca5-0c5c-43d3-aafa-50bcbb135c21" class="">
+</p></div></article></body></html>

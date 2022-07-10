@@ -1,0 +1,776 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Arduinoでステッピングモータを回す</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c903a886-1a02-415f-9e4a-8696e8bb750b" class="page sans"><header><h1 class="page-title">Arduinoでステッピングモータを回す</h1></header><div class="page-body"><p id="80af376b-f385-4c52-bf3c-777e47f2c70a" class="block-color-gray"><a href="http://zattouka.net/GarageHouse/micon/Motor/Stepping1.htm">http://zattouka.net/GarageHouse/micon/Motor/Stepping1.htm</a></p><p id="0fc147a9-e5c2-4286-b9e9-21fa2e5a89ff" class="">
+</p><p id="5dc22bb9-fe8c-40a8-aeb5-17fb2ff6aa05" class=""><a href="http://zattouka.net/GarageHouse/micon/Motor/Servo.htm">前回</a>はサーボモータを動かしてみました、この頁ではArduinoを使ってステッピングモータを動かします。 尚、PICを使ってステッピングモータを動かす記事は<a href="http://zattouka.net/GarageHouse/micon/Motor/Stepping2.htm">こちら</a>を見て下さい。</p><p id="213c7ab3-49cf-4c56-8462-203a908cf9f6" class="">ステッピングモータは秋月電子ので購入しました。
+ このモータは、励磁方式が２相ユニポーラで１回転(360度)は288ステップ(1step 1.25度)です、入力電圧は12V程掛けて500mAくらい流れる様です。
+ なので、この頁ではユニポーラタイプのステッピングモータについて書いています。</p><p id="ceff5b4e-b357-4f12-b23e-6be601d8853c" class=""><a href="http://akizukidenshi.com/catalog/g/gP-05373/">こちら</a>で実験しましょう、但し、１回転(360度)は200ステップ(1step 1.8度)です。 <strong>*3)</strong>
+ 又、モータの線色も異なります、と読替えます</p><p id="7cc7250a-aa2c-458d-8184-aeb51dc3a0bb" class=""><strong>ステッピングモータとサーボモータの比較</strong></p><div id="81d3db3c-fefa-4a70-8c3f-77322307f4d2" class="collection-content"><h4 class="collection-title"></h4><table class="collection-content"><thead><tr><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesTitle"><path d="M7.73943662,8.6971831 C7.77640845,8.7834507 7.81338028,8.8943662 7.81338028,9.00528169 C7.81338028,9.49823944 7.40669014,9.89260563 6.91373239,9.89260563 C6.53169014,9.89260563 6.19894366,9.64612676 6.08802817,9.30105634 L5.75528169,8.33978873 L2.05809859,8.33978873 L1.72535211,9.30105634 C1.61443662,9.64612676 1.2693662,9.89260563 0.887323944,9.89260563 C0.394366197,9.89260563 0,9.49823944 0,9.00528169 C0,8.8943662 0.0246478873,8.7834507 0.0616197183,8.6971831 L2.46478873,2.48591549 C2.68661972,1.90669014 3.24119718,1.5 3.90669014,1.5 C4.55985915,1.5 5.12676056,1.90669014 5.34859155,2.48591549 L7.73943662,8.6971831 Z M2.60035211,6.82394366 L5.21302817,6.82394366 L3.90669014,3.10211268 L2.60035211,6.82394366 Z M11.3996479,3.70598592 C12.7552817,3.70598592 14,4.24823944 14,5.96126761 L14,9.07922535 C14,9.52288732 13.6549296,9.89260563 13.2112676,9.89260563 C12.8169014,9.89260563 12.471831,9.59683099 12.4225352,9.19014085 C12.028169,9.6584507 11.3257042,9.95422535 10.5492958,9.95422535 C9.60035211,9.95422535 8.47887324,9.31338028 8.47887324,7.98239437 C8.47887324,6.58978873 9.60035211,6.08450704 10.5492958,6.08450704 C11.3380282,6.08450704 12.040493,6.33098592 12.4348592,6.81161972 L12.4348592,5.98591549 C12.4348592,5.38204225 11.9172535,4.98767606 11.1285211,4.98767606 C10.6602113,4.98767606 10.2411972,5.11091549 9.80985915,5.38204225 C9.72359155,5.43133803 9.61267606,5.46830986 9.50176056,5.46830986 C9.18133803,5.46830986 8.91021127,5.1971831 8.91021127,4.86443662 C8.91021127,4.64260563 9.0334507,4.44542254 9.19366197,4.34683099 C9.87147887,3.90316901 10.6232394,3.70598592 11.3996479,3.70598592 Z M11.1778169,8.8943662 C11.6830986,8.8943662 12.1760563,8.72183099 12.4348592,8.37676056 L12.4348592,7.63732394 C12.1760563,7.29225352 11.6830986,7.11971831 11.1778169,7.11971831 C10.5616197,7.11971831 10.056338,7.45246479 10.056338,8.0193662 C10.056338,8.57394366 10.5616197,8.8943662 11.1778169,8.8943662 Z M0.65625,11.125 L13.34375,11.125 C13.7061869,11.125 14,11.4188131 14,11.78125 C14,12.1436869 13.7061869,12.4375 13.34375,12.4375 L0.65625,12.4375 C0.293813133,12.4375 4.43857149e-17,12.1436869 0,11.78125 C-4.43857149e-17,11.4188131 0.293813133,11.125 0.65625,11.125 Z"></path></svg></span>ステッピング モータ</th><th><span class="icon property-icon"><svg viewBox="0 0 14 14" style="width:14px;height:14px;display:block;fill:rgba(55, 53, 47, 0.45);flex-shrink:0;-webkit-backface-visibility:hidden" class="typesText"><path d="M7,4.56818 C7,4.29204 6.77614,4.06818 6.5,4.06818 L0.5,4.06818 C0.223858,4.06818 0,4.29204 0,4.56818 L0,5.61364 C0,5.88978 0.223858,6.11364 0.5,6.11364 L6.5,6.11364 C6.77614,6.11364 7,5.88978 7,5.61364 L7,4.56818 Z M0.5,1 C0.223858,1 0,1.223858 0,1.5 L0,2.54545 C0,2.8216 0.223858,3.04545 0.5,3.04545 L12.5,3.04545 C12.7761,3.04545 13,2.8216 13,2.54545 L13,1.5 C13,1.223858 12.7761,1 12.5,1 L0.5,1 Z M0,8.68182 C0,8.95796 0.223858,9.18182 0.5,9.18182 L11.5,9.18182 C11.7761,9.18182 12,8.95796 12,8.68182 L12,7.63636 C12,7.36022 11.7761,7.13636 11.5,7.13636 L0.5,7.13636 C0.223858,7.13636 0,7.36022 0,7.63636 L0,8.68182 Z M0,11.75 C0,12.0261 0.223858,12.25 0.5,12.25 L9.5,12.25 C9.77614,12.25 10,12.0261 10,11.75 L10,10.70455 C10,10.4284 9.77614,10.20455 9.5,10.20455 L0.5,10.20455 C0.223858,10.20455 0,10.4284 0,10.70455 L0,11.75 Z"></path></svg></span>RCサーボモー タ</th></tr></thead><tbody><tr id="165ccd2d-4724-4071-8d35-4b32a2b70671"><td class="cell-title"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/Untitled%20Database%2081d3db3cfefa4a708c3f77322307f4d2/%E5%88%B6%E5%BE%A1%20165ccd2d472440718d354b32a2b70671.html">制御</a></td><td class="cell-^]Mj">ワンパルス送る度に一定の角度だけ回転します。 例えば、今回のモータならワンパルス(1step)で1.25度回転です。</td></tr><tr id="e090461e-f397-44dc-a23b-dc2ca9dc22be"><td class="cell-title"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/Untitled%20Database%2081d3db3cfefa4a708c3f77322307f4d2/%E5%9B%9E%E8%BB%A2%20e090461ef39744dca23bdc2ca9dc22be.html">回転</a></td><td class="cell-^]Mj">連続回転OK 今回のモータは288ステップで１回転なので、 864パルス送れば３回転して止まります。 また、パルスのONさせる幅を変えると回転速度が変わります。</td></tr><tr id="81aafbc0-79e7-444b-83b6-1cfc6a1ee74f"><td class="cell-title"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/Untitled%20Database%2081d3db3cfefa4a708c3f77322307f4d2/%E7%B2%BE%E5%BA%A6%2081aafbc079e7444b83b61cfc6a1ee74f.html">精度</a></td><td class="cell-^]Mj">停止制度は低くモータに依存します。 例えば、今回のモータなら1.25度まいです。</td></tr><tr id="1e035527-a9c8-410d-bec2-fca9f6b68d0b"><td class="cell-title"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/Untitled%20Database%2081d3db3cfefa4a708c3f77322307f4d2/%E3%83%88%E3%83%AB%E3%82%AF%201e035527a9c8410dbec2fca9f6b68d0b.html">トルク</a></td><td class="cell-^]Mj">低速域でのトルクが大きい、高回転になればトルクが小さく なり、そのうち回転しなくなる。</td></tr><tr id="a799938a-5f2e-4942-8c12-7967562ae6ee"><td class="cell-title"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/Untitled%20Database%2081d3db3cfefa4a708c3f77322307f4d2/%E5%9B%9E%E8%B7%AF%20a799938a5f2e49428c127967562ae6ee.html">回路</a></td><td class="cell-^]Mj">FET等でドライバーを作る必要がある。 (マイコンへの配線は４本：２相時)</td></tr><tr id="3448345f-bca3-45b0-a596-aaaf2579bb2d"><td class="cell-title"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/Untitled%20Database%2081d3db3cfefa4a708c3f77322307f4d2/%E4%BE%A1%E6%A0%BC%203448345fbca345b0a596aaaf2579bb2d.html">価格</a></td><td class="cell-^]Mj">安い</td></tr></tbody></table></div><h3 id="d05af5ba-1834-4e34-be2a-978114319f66" class="">《 配線図 》</h3><figure id="04a763c8-9c25-4d58-beab-b9ae5083cb84" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping12.jpg"><img style="width:360px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping12.jpg"/></a></figure><p id="7ca89e26-d765-4237-9747-aa98889ec9cb" class="">この左図が実態配線図です。</p><p id="23ffb45f-28f3-4c86-a5db-f4680718417f" class="">こちらの<a href="http://zattouka.net/GarageHouse/micon/circuit/FET.htm">「ＦＥＴをマイコン出力のスイッチとして使う方法」</a> も合わせて読んでおきましょう。</p><p id="67de0ed5-ad7b-45d9-a8fd-1095e11dbaac" class="">今回利用するモータには、接続する為のコネクターケーブルが付属しています、
+ ブレッドボードにそのまま刺せなくもないのですがヘッダーピンあたりに半田付けしたほうが良いでしょう。</p><p id="d76bf2c3-32ed-47a0-bad1-392468ac44bf" class="">Arduinoは外部電池９Ｖを接続しています、なのでモータの電源は９Ｖでの実験です。
+ ＵＳＢからの電源で駆動させるのは止めましょう。</p><p id="76af11b1-9ae8-4dd0-9cc5-316edfff8fbe" class="">ArduinoのVin端子は外部電池９Ｖ電圧がそのまま出力されています。</p><figure id="cc246960-3647-46d5-ade8-0c2676f4a498" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping11.jpg"><img style="width:400px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping11.jpg"/></a></figure><p id="112ca627-42a6-4c63-aaef-b453966d4716" class="">ステッピングモータの制御方法について</p><p id="0fbbdeb3-1aa2-4f6f-a164-2b0c7b20caa8" class="">左図の様にArduinoデジタル８番端子から
+ ＦＥＴを介してモータの白色線に接続されていますねこれが１回路分です。
+ デジタル９番端子からモータの黄色線、
+ デジタル１０番端子からモータの赤色線、
+ デジタル１１番端子からモータの緑色線、
+ と全部で４回路有ります。</p><p id="f47505a6-66e9-4fa5-b3f6-ea95d6385fe7" class="">モータの黒色線と青色線は＋電源(9V)に接続です。</p><figure id="a173ae06-1e99-46ce-a693-cc81d8438f19" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping13.jpg"><img style="width:371px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping13.jpg"/></a></figure><p id="fdbbd8f6-aff3-4b4a-8a36-8c093702ab74" class="">この様に２回路ずつ順次ＯＮさせる方式を<strong>２相励磁方式</strong>と言います。
+ ワンパルス１ｓｔｅｐあたり1.25度回転します。
+ パルスのONする幅を短くするとモータの回転速度が上がります。</p><p id="dd60227a-b964-4f52-a56f-0bff55aa5611" class="">尚、ステッピングモータの詳しい制御の話は、 <a href="http://mitt.la.coocan.jp/pic/index.html">「PICで遊ぶ電子工作」</a>さんの<a href="http://mitt.la.coocan.jp/pic/pic5_19.html">「ステッピングモータの制御」</a>や <strong>*3)</strong><a href="http://www.ftech-net.co.jp/robot/index.html">｢エフテック株式会社｣</a>さんの<a href="http://www.ftech-net.co.jp/robot/howto/motor01.html">｢ステッピングモータを廻す｣</a>
+ を参考にして下さい。</p><p id="e67b3b62-b23c-4941-aa32-7d61c8cece77" class="">ここではArduinoの<a href="http://www.musashinodenpa.com/arduino/ref/">標準ライブラリ</a>のStepperライブラリを利用してプログラムしています。</p><h3 id="ea7dbd48-3e13-458e-9d1e-e77971c5ec39" class="">《arduinoのスケッチ１》</h3><p id="317cebfa-1b7d-4fa8-9038-45486f400315" class="">①上記の回路の様に配線を行います。
+ (ここでArduinoからの電源線、VinかGND端子は接続しないで置く)</p><p id="a9c9c7cb-df05-4dab-8276-b4ff9b739dca" class="">②arduinoボード(Arduino Duemilanove 328)はUSBケーブルで接続してarduino IDEを起動させます。</p><p id="cb794a9d-7844-4d4f-859b-d3af9ae91eb8" class="">③ＩＤＥに下記のスケッチプログラムをコピーペーストして貼り付けて下さい。</p><pre id="f4448b1f-af21-4397-ad8c-6dcca96528ec" class="code code-wrap"><code>---------------------------------------------------------------------
+#include &lt;Stepper.h&gt;
+
+#define STEPS 288                       // ステッピングモータの１回転あたりのステップ数
+
+Stepper Motor(STEPS, 8, 9, 10, 11) ;    // stepperクラスのインスタンスを生成する
+
+void setup()
+{
+     Motor.setSpeed(40) ;               // モータの速さを毎分の回転数(RPM)で設定する
+}
+void loop()
+{
+     Motor.step(4) ;                    // ４ステップのみ回転させる
+}
+---------------------------------------------------------------------
+</code></pre><p id="4af2b6df-fc76-4062-9ec4-7613baaaf25d" class="">④ＩＤＥツールバーの赤枠部分｢Upload｣ボタンをクリックしてコンパイルとarduinoボードに書込みを
+ 行います。</p><figure id="c90ce7d6-bfed-491c-bc22-56deb0eff5a8" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/upload2.jpg"><img style="width:495px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/upload2.jpg"/></a></figure><p id="327086fa-4cd8-4bde-9a28-337980e51bf4" class="">⑤ＵＳＢケーブルを外してArduino電源(Vin/GND)を接続し、９Ｖ外部電池を取り付けましょう、
+ モータが連続回転すると思います。</p><p id="51418bfd-e2e8-4df7-b3fd-2fe3b81fc416" class="">下記に、上記スケッチで実行させた時の出力波形を参考に貼り付けて置きます。 *1)</p><p id="e0787721-8de1-4eae-bf7b-00e08bc6e084" class="">正転出力(白赤-&gt;赤黄-&gt;黄緑-&gt;白緑 の4step繰り返し)</p><figure id="cabf1961-4345-4afa-a549-9bdd07b1c379" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping16-1.jpg"><img style="width:626px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping16-1.jpg"/></a></figure><p id="1c3aed48-f528-439d-9b60-c2ae27cd0196" class="">逆転出力(白緑-&gt;黄緑-&gt;赤黄-&gt;白赤 の4step繰り返し)</p><figure id="ee6da8e7-1989-4186-80b5-a2f9abbd3e31" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping16-2.jpg"><img style="width:637px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping16-2.jpg"/></a></figure><p id="3a383abd-69e8-436f-906c-6d298d6d0148" class=""><strong>スケッチについて</strong></p><p id="78d5fd3b-44d0-4d0b-bbd0-dbba37d37c9a" class=""><strong>Stepper Motor(STEPS, 8, 9, 10, 11)</strong>
+ ステッピングモータのライブラリーを生成します、<strong>Motor</strong>の名前は自由に変更出来ます。
+ STEPSはモータの１回転当たりのステップ数なので各モータにより異なります。
+ 8(白),9(黄),10(赤),11(緑)は接続しているモータのデジタル端子番号です。</p><p id="ed69535a-4c3e-49f8-be9c-bc960a75bdc0" class=""><strong>Motor．setSpeed(40)</strong>
+ ステッピングモータの回転速度を設定します。
+ 1分間あたり何回転するのかを指定しますが、早い回転数にするとモータは回らなくなります、
+ 今回のモータで25～65辺りがよさげです。</p><p id="aac94766-0366-426c-b9ab-3fed9812bcca" class=""><strong>Motor．step(4)</strong>
+ この関数で実際にモータが回転します、指定する数値はステップ数です。
+ もし、864と指定したら今回のモータだと３回転(288x3)して止まります、
+ なので864ステップ実行するまではこの関数は終了しません、注意です。
+ (って事は終了するまでは次のプログラムを実行しないと言う事です)
+ また、-864とマイナス数値を指定したら逆回転します、-32767～32767の範囲です。
+ 今回のスケッチは４ステップ動作が繰り返し実行さえるので回転したままとなります。</p><p id="c58b24af-61c9-479b-ac3e-235eace20589" class="">※ 停止時は、コイルに電流を流していないのでフリーラン状態でトルクは掛かっていません。</p><h3 id="325d545b-8ecf-4aa5-901a-94859fcb6c06" class="">《arduinoのスケッチ２》</h3><figure id="2f17c66e-ec87-419b-a2b5-bb3e29d682d4" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping15.jpg"><img style="width:320px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping15.jpg"/></a></figure><p id="8bfbf28e-8124-4919-b9ac-d5ef81c14c06" class="">こんどは上図の配線図に半固定抵抗(ボリューム)を
+ 追加配線して下さい。
+ 下のスケッチではアナログ０番端子に半固定抵抗を
+ 接続した場合の例です。
+ 左写真が可変抵抗を追加した場合の例です。
+ 尚、半固定抵抗の接続方法は<a href="http://zattouka.net/GarageHouse/micon/Arduino/LEDblink/LEDblink.htm">こちら</a>を参考にして
+ 下さい。</p><p id="d332682e-2fe4-44d7-bccf-cf11be1cc4ee" class="">このスケッチを動かしてみましょう、半固定抵抗を
+ 右に回せば回した分だけモータが右に回転します、
+ 半固定抵抗を左に回せばモータも左へ回転です、
+ 半固定抵抗の回転を止めればモータも停止します。
+ （モータ停止状態で微妙にフルフルしていますが、
+ これは半固定抵抗の読取り値がふらついているから
+ です）</p><p id="1c8f85c8-8873-4175-b804-c418d19318af" class="">半固定抵抗とモータの回す方向が逆の場合は、
+ 半固定抵抗の＋電源とＧＮＤ線を入れ替えて下さい。</p><pre id="e151cf3f-6862-4163-bbdd-3060dae5ea70" class="code code-wrap"><code>---------------------------------------------------------------------
+#include &lt;Stepper.h&gt;
+
+#define STEPS 288                       // ステッピングモータの１回転あたりのステップ数
+int PreVal ;                            // 前回読み込んだ可変抵抗の値を保存する変数
+
+Stepper Motor(STEPS, 8, 9, 10, 11) ;    // stepperクラスのインスタンスを生成する
+
+void setup()
+{
+     Motor.setSpeed(40) ;               // モータの速さを毎分の回転数(RPM)で設定する
+     PreVal = 0 ;                       // 前回値は０として初期化
+}
+void loop()
+{
+     int x ;
+
+     x = analogRead(0) ;                // 可変抵抗からの値を読み込み今回値とする
+     Motor.step(x - PreVal) ;           // 今回値－前回値の値だけ回転させる
+     PreVal = x ;                       // 今回値を前回値として保存する
+}
+---------------------------------------------------------------------
+</code></pre><h3 id="788b038d-cf8e-49aa-80f8-e3af46696464" class="">《arduinoのスケッチ３》</h3><p id="3caa4aff-9e9d-4a02-9782-248987efb1a9" class="">このスケッチも上スケッチ２の様に半固定抵抗を追加した場合の例です。
+ このスケッチも動かしてみましょう、こんどは半固定抵抗を回すとモータの回転速度が変わります。
+ 速度が速すぎると回らなくなります、このモータで25～65が良さげなので、0-100を25-65と変えても良いでしょう。</p><pre id="9a027402-1888-432d-93db-275304639c11" class="code code-wrap"><code>---------------------------------------------------------------------
+#include &lt;Stepper.h&gt;
+
+#define STEPS 288                       // ステッピングモータの１回転あたりのステップ数
+
+Stepper Motor(STEPS, 8, 9, 10, 11) ;    // stepperクラスのインスタンスを生成する
+
+void setup()
+{
+}
+void loop()
+{
+     int x ;
+
+     x = analogRead(0) ;                // 可変抵抗からの値を読み込む
+     x = map(x, 0, 1023, 0, 100) ;      // 可変抵抗値(0-1023)を速度値(0-100)に変換する
+     Motor.setSpeed(x) ;                // モータの速さを設定する
+     Motor.step(4) ;                    // 4Stepだけ回転させる
+}
+---------------------------------------------------------------------
+</code></pre><h3 id="30def3aa-eaf6-4a64-a524-f5d873f523ca" class="">《 その他 》  実験風景の写真</h3><figure id="39b5ae7d-28af-4870-aa63-e0a64f90b4ba" class="image"><a href="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping14.jpg"><img style="width:500px" src="Arduino%E3%81%A6%E3%82%99%E3%82%B9%E3%83%86%E3%83%83%E3%83%92%E3%82%9A%E3%83%B3%E3%82%AF%E3%82%99%E3%83%A2%E3%83%BC%E3%82%BF%E3%82%92%E5%9B%9E%E3%81%99%20c903a8861a02415f9e4a8696e8bb750b/stepping14.jpg"/></a></figure><p id="13832af5-e721-4e6e-b81b-1b040662a51b" class="">モータの回転が判り易い様に、軸にはテープが巻いて有ります、適当な回転数で回さないとモータは
+ 結構振動が有ります。
+ 外部電源１２Ｖでも行ってみました、回転速度も上がり安定して制御しやすい様に感じます、
+ また、４．５Ｖでも行いましたが回るには回ります、何かに組み込む場合は１２Ｖ電源が良いかもね。</p><p id="5b084284-0f81-4c59-b647-dbf3a79e66e7" class="">尚、バイポーラステッピングモータドライバのL6470を使った記事はPICでの内容ですが<a href="http://zattouka.net/GarageHouse/micon/Motor/L6470.htm">こちら</a>を参照下さい。<strong>*2)</strong></p><p id="29dbcb4b-bd02-4316-ad93-c2af168471ef" class="">リンク切れ見直し(*3) 2017/01/12
+ 追記(*2) 2016/09/27
+ 追記(*1) 2014/06/22</p><p id="50cffa34-0a28-4622-9744-47c804fd13f7" class=""><a href="http://zattouka.net/GarageHouse/index.htm">【きむ茶工房ガレージハウス】</a> <em>Copyright (C) 2006-2020 Shigehiro Kimura All Rights Reserved.</em></p></div></article></body></html>

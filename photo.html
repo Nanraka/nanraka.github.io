@@ -14,74 +14,166 @@
         /* 日本語はNoto Sans JP、英数字はInterを適用 */
         body {
             font-family: 'Inter', 'Noto Sans JP', sans-serif;
-            background-color: #f9fafb; /* 少しだけグレーがかった白 */
+            background-color: #ffffff; /* 背景を真っ白に */
+        }
+        /* ホバーエフェクト用のカスタムCSS */
+        .image-container .overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .image-container:hover .overlay {
+            opacity: 1;
         }
     </style>
 </head>
 <body class="text-gray-800">
 
     <!-- 全体を囲むコンテナ -->
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
         <!-- ヘッダー: サイトタイトル -->
-        <header class="text-center mb-16">
-            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">My Photo Portfolio</h1>
-            <p class="mt-4 text-lg text-gray-500">A collection of my favorite shots.</p>
+        <header class="text-center mb-20">
+            <h1 class="text-3xl font-bold tracking-widest text-gray-900 uppercase">My Photo Portfolio</h1>
+            <p class="mt-3 text-sm tracking-wider text-gray-500">A collection of my favorite shots.</p>
         </header>
 
-        <!-- メインコンテンツ: 写真が並ぶエリア -->
+        <!-- メインコンテンツ: 写真が並ぶグリッドエリア -->
         <main>
-            <!-- 写真のリスト -->
-            <div class="space-y-20">
+            <!-- 
+                レスポンシブなグリッドレイアウト
+                - デフォルト（スマホ）: 1カラム
+                - sm (640px)以上: 2カラム
+                - lg (1024px)以上: 4カラム
+            -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 
                 <!-- 写真 1 -->
-                <article>
-                    <div class="aspect-w-3 aspect-h-2 w-full overflow-hidden rounded-lg shadow-lg">
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
                         <!-- ここにあなたの画像ファイルを指定します -->
-                        <img src="https://placehold.co/800x600/e2e8f0/4a5568?text=img" 
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
                              alt="ここに画像の説明を記述" 
-                             class="w-full h-full object-cover object-center">
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
                     </div>
-                    <div class="mt-5 text-center">
-                        <p class="text-sm text-gray-500">
-                            <span class="mx-2">Shutter Speed: 1/250s</span> |
-                            <span class="mx-2">ISO: 400</span> |
-                            <span class="mx-2">Aperture: f/8.0</span>
-                        </p>
+                    <!-- ホバー時に表示されるオーバーレイ -->
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/250s</p>
+                            <p class="text-sm">ISO: 400</p>
+                            <p class="text-sm">Aperture: f/8.0</p>
+                        </div>
                     </div>
                 </article>
 
                 <!-- 写真 2 -->
-                <article>
-                    <div class="aspect-w-3 aspect-h-2 w-full overflow-hidden rounded-lg shadow-lg">
-                        <!-- ここにあなたの画像ファイルを指定します -->
-                        <img src="https://placehold.co/800x600/e2e8f0/4a5568?text=img" 
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
                              alt="ここに画像の説明を記述" 
-                             class="w-full h-full object-cover object-center">
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
                     </div>
-                    <div class="mt-5 text-center">
-                        <p class="text-sm text-gray-500">
-                            <span class="mx-2">Shutter Speed: 1/1000s</span> |
-                            <span class="mx-2">ISO: 100</span> |
-                            <span class="mx-2">Aperture: f/2.8</span>
-                        </p>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/1000s</p>
+                            <p class="text-sm">ISO: 100</p>
+                            <p class="text-sm">Aperture: f/2.8</p>
+                        </div>
                     </div>
                 </article>
 
                 <!-- 写真 3 -->
-                <article>
-                    <div class="aspect-w-3 aspect-h-2 w-full overflow-hidden rounded-lg shadow-lg">
-                        <!-- ここにあなたの画像ファイルを指定します -->
-                        <img src="https://placehold.co/800x600/e2e8f0/4a5568?text=img" 
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
                              alt="ここに画像の説明を記述" 
-                             class="w-full h-full object-cover object-center">
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
                     </div>
-                    <div class="mt-5 text-center">
-                        <p class="text-sm text-gray-500">
-                            <span class="mx-2">Shutter Speed: 30s</span> |
-                            <span class="mx-2">ISO: 1600</span> |
-                            <span class="mx-2">Aperture: f/11.0</span>
-                        </p>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 30s</p>
+                            <p class="text-sm">ISO: 1600</p>
+                            <p class="text-sm">Aperture: f/11.0</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 写真 4 -->
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/60s</p>
+                            <p class="text-sm">ISO: 800</p>
+                            <p class="text-sm">Aperture: f/4.0</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 写真 5 -->
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/4000s</p>
+                            <p class="text-sm">ISO: 200</p>
+                            <p class="text-sm">Aperture: f/1.8</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 写真 6 -->
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/125s</p>
+                            <p class="text-sm">ISO: 100</p>
+                            <p class="text-sm">Aperture: f/5.6</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 写真 7 -->
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/500s</p>
+                            <p class="text-sm">ISO: 200</p>
+                            <p class="text-sm">Aperture: f/4.5</p>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 写真 8 -->
+                <article class="relative image-container group">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden">
+                        <img src="https://placehold.co/600x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center overlay">
+                        <div class="text-center text-white p-4">
+                            <p class="text-sm">Shutter Speed: 1/800s</p>
+                            <p class="text-sm">ISO: 100</p>
+                            <p class="text-sm">Aperture: f/2.0</p>
+                        </div>
                     </div>
                 </article>
 
@@ -89,8 +181,8 @@
         </main>
 
         <!-- フッター -->
-        <footer class="mt-20 text-center">
-            <p class="text-xs text-gray-400">&copy; 2024 Your Name. All Rights Reserved.</p>
+        <footer class="mt-24 text-center">
+            <p class="text-xs text-gray-400 tracking-wider">&copy; 2024 Your Name. All Rights Reserved.</p>
         </footer>
 
     </div>

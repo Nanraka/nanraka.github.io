@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photo Portfolio</title>
+    <!-- Tailwind CSSを読み込み -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google FontsからInterフォントを読み込み -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* 日本語はNoto Sans JP、英数字はInterを適用 */
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #f9fafb; /* 少しだけグレーがかった白 */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- 全体を囲むコンテナ -->
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- ヘッダー: サイトタイトル -->
+        <header class="text-center mb-16">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">My Photo Portfolio</h1>
+            <p class="mt-4 text-lg text-gray-500">A collection of my favorite shots.</p>
+        </header>
+
+        <!-- メインコンテンツ: 写真が並ぶエリア -->
+        <main>
+            <!-- 写真のリスト -->
+            <div class="space-y-20">
+
+                <!-- 写真 1 -->
+                <article>
+                    <div class="aspect-w-3 aspect-h-2 w-full overflow-hidden rounded-lg shadow-lg">
+                        <!-- ここにあなたの画像ファイルを指定します -->
+                        <img src="https://placehold.co/800x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center">
+                    </div>
+                    <div class="mt-5 text-center">
+                        <p class="text-sm text-gray-500">
+                            <span class="mx-2">Shutter Speed: 1/250s</span> |
+                            <span class="mx-2">ISO: 400</span> |
+                            <span class="mx-2">Aperture: f/8.0</span>
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 写真 2 -->
+                <article>
+                    <div class="aspect-w-3 aspect-h-2 w-full overflow-hidden rounded-lg shadow-lg">
+                        <!-- ここにあなたの画像ファイルを指定します -->
+                        <img src="https://placehold.co/800x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center">
+                    </div>
+                    <div class="mt-5 text-center">
+                        <p class="text-sm text-gray-500">
+                            <span class="mx-2">Shutter Speed: 1/1000s</span> |
+                            <span class="mx-2">ISO: 100</span> |
+                            <span class="mx-2">Aperture: f/2.8</span>
+                        </p>
+                    </div>
+                </article>
+
+                <!-- 写真 3 -->
+                <article>
+                    <div class="aspect-w-3 aspect-h-2 w-full overflow-hidden rounded-lg shadow-lg">
+                        <!-- ここにあなたの画像ファイルを指定します -->
+                        <img src="https://placehold.co/800x600/e2e8f0/4a5568?text=img" 
+                             alt="ここに画像の説明を記述" 
+                             class="w-full h-full object-cover object-center">
+                    </div>
+                    <div class="mt-5 text-center">
+                        <p class="text-sm text-gray-500">
+                            <span class="mx-2">Shutter Speed: 30s</span> |
+                            <span class="mx-2">ISO: 1600</span> |
+                            <span class="mx-2">Aperture: f/11.0</span>
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+        </main>
+
+        <!-- フッター -->
+        <footer class="mt-20 text-center">
+            <p class="text-xs text-gray-400">&copy; 2024 Your Name. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

@@ -48,20 +48,16 @@
     </header>
     <!-- ===== ヘッダーここまで ===== -->
 
-    <!-- ===== メインビジュアル ===== -->
-    <main>
-        <!-- 画面の高さからヘッダーの高さを引いた分だけ高さを確保 -->
-        <div class="w-full h-[calc(100vh-4rem)]">
-            <!-- 
-                ここにあなたのメインビジュアルとなる画像を指定します。
-                `object-cover`クラスにより、コンテナに合わせて画像がトリミングされます。
-            -->
-            <img src="https://placehold.co/1920x1080/e2e8f0/4a5568?text=Main+Visual" 
-                 alt="メインビジュアル" 
-                 class="w-full h-full object-cover">
-        </div>
-    </main>
-    <!-- ===== メインビジュアルここまで ===== -->
+<!-- ===== メインビジュアル ===== -->
+<main>
+  <div class="w-full px-4 py-8">
+    <div class="max-w-7xl mx-auto rounded-lg overflow-hidden shadow-md">
+      <img src="https://placehold.co/1920x1080/e2e8f0/4a5568?text=Main+Visual" 
+           alt="メインビジュアル" 
+           class="w-full h-[calc(100vh-8rem)] object-cover">
+    </div>
+  </div>
+</main>
 
 </body>
 </html>
